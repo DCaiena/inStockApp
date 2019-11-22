@@ -10,8 +10,9 @@ export default class components extends Component {
     return (
         <View style={[{backgroundColor:config.colors.cinza, margin:10 ,borderRadius:50, alignItems: 'center' , flexDirection:'row'}]} >
             <TextInput
-            placeholder={'Pesquisar Produtos'}
+            placeholder={this.props.placeholder}
             style={{flex:1, marginHorizontal:27, }}
+            onChangeText={this.props.handleChangeText}
             />
             <FontAwesome5
             size={20}

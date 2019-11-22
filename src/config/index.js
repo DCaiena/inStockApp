@@ -1,5 +1,6 @@
 const config ={
-    server:'http://localhost:3000',
+//    server: 'https://pokeapi.co/api/v2/', 
+    server:'http://192.168.43.42:8000/',
     colors:{
         branco:'#fff',
         preto:'#000',
@@ -10,7 +11,7 @@ const config ={
         post: (url, data ) =>{
             return new Promise( async(resolve, reject) => {
                 try {
-                   let resp = await  fetch(server+url,{
+                   let resp = await  fetch( config.server +url,{
                         method:'POST',
                         body: JSON.stringify(data),
                         headers:{
@@ -24,17 +25,17 @@ const config ={
                 }
             })
         },
-        get: (url, data ) => {
+        get: (url ) => {
             return new Promise ( async(resolve, reject) =>{
                 try {
-                    let resp = await fetch(server+url,{
+                    let resp = await fetch( config.server+ url ,{
                         method:'GET',
                         headers:{
-                            Accept:'application/json',
-                            'Content-type':'application/json'
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
                         }
                     })
-                    resolve(resp)
+                    resolve(await resp.json())
                 } catch (error) {
                     reject(error)
                 }
@@ -43,7 +44,7 @@ const config ={
         put:(url, data) =>{
             return new Promise (async(resolve, reject) =>{
                 try {
-                    let resp = await fetch(server+url,{
+                    let resp = await fetch(config.server+url,{
                         method:'PUT',
                         body:  JSON.stringify(data),
                         headers:{
@@ -57,10 +58,10 @@ const config ={
                 }
             })
         },
-        deletet: (url, data ) =>{
+        delete: (url, data ) =>{
             return new Promise( async(resolve, reject) => {
                 try {
-                   let resp = await  fetch(server+url,{
+                   let resp = await  fetch(config.server+url,{
                         method:'DELETE',
                         body: JSON.stringify(data),
                         headers:{
