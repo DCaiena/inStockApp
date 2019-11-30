@@ -20,25 +20,28 @@ export default class EstoqueRelatorio extends Component {
     }
 
     componentDidMount() {
+        this.getProdutos()
         
-        this.state.produtos.unshift({
-                    _id: '23',
-                    codigo: '244',
-                    nome_produto: 'Arroz',
-                    tipo: 'Arroz',
-                    data_fabricacao: '23/3/333',
-                    validade: '32/03/4333',
-                    lotes: '2',
-                    unidades: '3',
-                    preco_unidade: '34'
-            })
+        // this.state.produtos.unshift({
+        //             _id: '23',
+        //             codigo: '244',
+        //             nome_produto: 'Arroz',
+        //             tipo: 'Arroz',
+        //             data_fabricacao: '23/3/333',
+        //             validade: '32/03/4333',
+        //             lotes: '2',
+        //             unidades_por_lote: '3',
+        //             preco_unidade: '34'
+        //     })
         this.setState({refresh:!this.state.refresh})
         //this.getProdutos()
     }
     async getProdutos() {
         try {
             let produtos = await config.requisicao.get('produto')
-            this.state.produtos.unshift(produtos)
+            produtos.map(produto =>{
+                this.state.produtos.unshift(produto)
+            })
             this.setState({ refresh: !this.state.refresh })
         } catch (error) {
             console.log(error, "2")
@@ -46,19 +49,20 @@ export default class EstoqueRelatorio extends Component {
     }
 
     async pesquisa(produto) {
-        let produtos = await config.requisicao.get('produtos')
+        let produtos = await config.requisicao.get('/produtos')
+
         this.setState({ produtos })
     }
 
     async excluir(produto){
-        let atualizarLista = await config.requisicao.put('exluir',produto)
+        let atualizarLista = await config.requisicao.get(`produto/${produto._id}`)
         this.setState({produtos:atualizarLista})
     }
 
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <Bar nameL={'arrow-left'} title={'Produtos'} nameR={'plus'} sizeR={20} onPressR={() => Actions.push('_add_produto',teste)} />
+                <Bar nameL={'arrow-left'} title={'Pesquisar Produtos'} nameR={'plus'} sizeR={20} onPressR={() => Actions.push('_add_produto')} />
                 <View style={{ backgroundColor: config.colors.branco, borderRadius: 5, margin: 10 }}>
                     <Input placeholder={'Pesquisar Produtos'} handleChangeText={produto => this.pesquisa(produto)} />
                     <FlatList
@@ -76,21 +80,6 @@ export default class EstoqueRelatorio extends Component {
 
 }
 
-const teste = {
-    item:{
-        _id: '23',
-        codigo: '244',
-        nome_produto: 'Arroz',
-        tipo: 'Arroz',
-        data_fabricacao: '23/3/333',
-        validade: '32/03/4333',
-        lotes: '2',
-        unidades: '3',
-        preco_unidade: '34'
-
-    }
-
-}
 class Item extends React.Component {
     render() {
         return (
@@ -108,9 +97,9 @@ class Item extends React.Component {
                 onPress={this.props.handleOnPress}
             >
 
-                <Text>{this.props.nome_produto} </Text>
-                <Text>{this.props.unidades} Uni</Text>
-                <Text>R${this.props.preco_unidade}.00</Text>
+                <Text>{this.props.nome} </Text>
+                <Text>{this.props.lote} Uni</Text>
+                <Text>R${this.props.valor}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ margin:10,justifyContent:'center', alignItems:'center'}} 
             onPress={this.props.excluir}

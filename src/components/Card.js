@@ -12,7 +12,6 @@ export default class components extends Component {
     const { main, txt, sec, txtView } = style
     return (
         <TouchableOpacity style={main} onPress={() => {
-          console.log(this.props.screen)
           Actions.push(this.props.screen)}} >
             <View style={sec}>
               <Image  resizeMode={'contain'} style={{width:width/3 , height:300}} source={{uri:this.props.icon}} />

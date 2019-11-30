@@ -4,7 +4,8 @@ import { View, Text, Dimensions, TextInput } from 'react-native';
 import Bar from '../components/Bar';
 import config from '../config'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
+import dayjs from 'dayjs'
+import DatePicker from '@react-native-community/datetimepicker'
 const width = Dimensions.get('window').width
 
 // import { Container } from './styles';
@@ -32,8 +33,12 @@ export default class pages extends Component {
             if(this.props._id){
                 let resp = await config.requisicao.put(this.state.form)
             }else{
-                let resp = await config.requisicao.post(this.state.form)
+                let {codigo,nome_produto,tipo,data_fabricacao,validade,lotes,unidades,preco_unidade} = this.state.form
+                let obj = {codigo,nome_produto,tipo,data_fabricacao,validade,lotes,unidades,preco_unidade}
+                let resp = await config.requisicao.post('produto', {obj})
+                console.log(resp)
             }
+
             alert('Salvo')
         } catch (error) {
             console.log(error)
@@ -48,7 +53,7 @@ export default class pages extends Component {
     render() {
         return (
             <KeyboardAwareScrollView>
-                <Bar nameL={'arrow-left'} title={this.props._id?'Editar Lote':'Adicionar Lote'} nameR={'save'} sizeR={25} onPressR={() => { console.log(this.state.form) }} />
+                <Bar nameL={'arrow-left'} title={this.props._id?'Editar Lote':'Adicionar Produto'} nameR={'save'} sizeR={25} onPressR={() => { this.salvar() }} />
                 <View>
                     <View style={{ backgroundColor: config.colors.branco, marginVertical: 15, borderRadius: 10, width: width / 1.1, alignSelf: 'center', alignItems: 'center', justifyContent: 'center' }} >
                         <Text style={{ borderBottomColor: config.colors.cinza, width, textAlign: 'center', marginVertical: 20, fontWeight: 'bold', fontSize: 20, color: config.colors.cinza, borderBottomWidth: 1 }} >Código</Text>
@@ -93,7 +98,7 @@ export default class pages extends Component {
                                 onChangeText={(unidades) => this.setState({ form:{...this.state.form, unidades} })}
                                 value={this.state.form.unidades}
                             />
-                            <Input placeholder="Unidade/ Lote"
+                            <Input placeholder="Preço/Uni"
                                 keyboardType={'numeric'}
                                 onChangeText={(preco_unidade) => this.setState({ form:{ ...this.state.form, preco_unidade} })}
                                 value={this.state.form.preco_unidade}

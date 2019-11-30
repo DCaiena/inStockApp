@@ -1,6 +1,6 @@
 const config ={
 //    server: 'https://pokeapi.co/api/v2/', 
-    server:'http://192.168.43.42:8000/',
+    server:'https://api-mercado-django.herokuapp.com/',
     colors:{
         branco:'#fff',
         preto:'#000',
@@ -11,6 +11,7 @@ const config ={
         post: (url, data ) =>{
             return new Promise( async(resolve, reject) => {
                 try {
+                    console.log(url, data,"00000000000000000")
                    let resp = await  fetch( config.server +url,{
                         method:'POST',
                         body: JSON.stringify(data),
